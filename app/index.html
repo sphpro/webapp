@@ -1,0 +1,1474 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Игровой портал</title>
+    <style>
+        @font-face {
+            font-family: 'Intro';
+            src: url('./intro.otf') format('opentype');
+        }
+
+        body {
+            background: url('img/fon.png') no-repeat center center fixed;
+            background-size: cover;
+            color: #fff;
+            font-family: 'Intro', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            height: auto;
+            padding-top: 60px;
+            padding-bottom: 50px;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+            -webkit-touch-callout: none;
+            scroll-behavior: smooth;
+            overflow: visible;
+        }
+
+        header {
+            position: fixed;
+            top: 0;
+            z-index: 10;
+            width: 100%;
+            padding: 10px 20px;
+            background-color: #333;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            font-family: 'Intro', Arial, sans-serif;
+            box-sizing: border-box;
+            font-size: 24px;
+        }
+
+        header img {
+            height: 30px;
+            width: 30px;
+            margin-right: 10px;
+            border-radius: 50%;
+        }
+
+        .language-option {
+            margin: 0 10px;
+            width: 50px;
+            height: 50px;
+            cursor: pointer;
+            border-radius: 50%;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            transition: transform 0.2s;
+        }
+
+        .language-option:hover {
+            transform: scale(1.1);
+        }
+        .tab {
+            position: fixed;
+            bottom: 0;
+            z-index: 10;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            background-color: #333;
+            padding: 10px 0;
+            border-radius: 50px;
+        }
+
+        .tab button {
+            background-color: inherit;
+            flex: 1 0 auto;
+            margin: 0 10px;
+            border: none;
+            outline: none;
+            cursor: pointer;
+            padding: 14px 20px;
+            transition: 0.3s;
+            color: #fff;
+            text-align: center;
+            border-radius: 50px;
+            font-size: 16px;
+            font-family: 'Intro', Arial, sans-serif;
+        }
+
+
+        .tab button:hover {
+            background-color: #555;
+            transform: translateY(-2px);
+        }
+
+        .tab button.active {
+            background-color: #666;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+        }
+
+        .tabcontent {
+            display: none;
+            overflow: auto;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            border-top: none;
+            overflow: auto;
+            flex-grow: 1;
+            margin-top: 0px;
+            margin-bottom: 50px;
+        }
+
+        .tabcontent.active {
+            display: flex;
+            opacity: 1;
+            visibility: visible;
+            transition: opacity 0.5s ease, visibility 0.5s ease;
+        }
+
+
+        .row {
+            display: flex;
+            flex-wrap: wrap;
+            width: 100%;
+            justify-content: space-around;
+        }
+        .game {
+            flex: 1 1 40%;
+            max-width: 209px;
+            margin: 10px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .game img:not(.secretimg) {
+            width: 100%;
+            height: auto;
+            max-height: 180px;
+            max-width: 180px;
+            border-radius: 50px;
+            box-shadow: 0px 0px 20px rgba(255, 255, 255, 0.8),
+                        0px 0px 30px rgba(173, 216, 230, 0.6);
+        }
+
+        @media (max-width: 400px) {
+        .row {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+        }
+
+        .game {
+            flex: 0 1 48%;
+            max-width: 48%;
+            margin: 1% 1%;
+            padding-top: 10px;
+        }
+
+        .game img:not(.secretimg) {
+            height: 140px !important;
+            width: auto !important;
+            max-width: 100% !important;
+            border-radius: 50px !important;
+            box-shadow: 0px 0px 20px rgba(255, 255, 255, 0.8),
+                    0px 0px 30px rgba(173, 216, 230, 0.6);
+        }
+        }
+        .game-info {
+            width: 100%;
+            margin-top: 10px;
+            font-family: 'Intro', Arial, sans-serif;
+        }
+        .game h3 {
+            font-size: 18px;
+            margin: 5px 0;
+        }
+        .game button {
+            font-size: 16px;
+            font-weight: bold;
+            padding: 12px 24px;
+            width: 130px;
+            border-radius: 25px;
+            background: linear-gradient(145deg, #4CAF50 0%, #087f23 100%);
+            box-shadow: 0 6px #065f18, 0 -6px #4CAF50 inset;
+            color: white;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            outline: none;
+            font-family: 'Intro', Arial, sans-serif;
+        }
+
+        .game button:hover {
+            background: linear-gradient(145deg, #087f23 0%, #4CAF50 100%);
+            box-shadow: 0 8px #065f18, 0 -6px #4CAF50 inset;
+            transform: translateY(-3px);
+        }
+
+        .game button:active {
+            box-shadow: 0 3px #065f18, 0 -3px #4CAF50 inset;
+            transform: translateY(2px);
+        }
+        canvas#particleCanvas {
+            position: fixed; /* Фиксируем канвас на фоне */
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+        }
+        .about-icon img {
+            width: 28px;
+            height: 28px;
+        }
+
+        .games-icon img {
+            width: 38px;
+            height: 38px;
+        }
+
+        .contact-icon img {
+            width: 28px;
+            height: 28px;
+        }
+        .secret-game {
+            margin-top: 50px;
+            margin-bottom: 100px;
+        }
+
+        .secretimg {
+            width: 100%;
+            height: auto;
+            border-radius: 50px;
+            box-shadow:
+                0 0 20px rgba(255, 0, 0, 0.8),
+                0 0 20px rgba(255, 127, 0, 0.8),
+                0 0 20px rgba(255, 255, 0, 0.8),
+                0 0 20px rgba(127, 255, 0, 0.8),
+                0 0 20px rgba(0, 255, 0, 0.8),
+                0 0 20px rgba(0, 255, 127, 0.8),
+                0 0 20px rgba(0, 255, 255, 0.8),
+                0 0 20px rgba(0, 127, 255, 0.8),
+                0 0 20px rgba(0, 0, 255, 0.8),
+                0 0 20px rgba(127, 0, 255, 0.8),
+                0 0 20px rgba(255, 0, 255, 0.8),
+                0 0 20px rgba(255, 0, 127, 0.8);
+            animation: rainbowGlow 5s linear infinite;
+            filter: hue-rotate(0deg); /* Initial filter state */
+        }
+
+        @keyframes rainbowGlow {
+            0%, 100% {
+                filter: hue-rotate(0deg);
+            }
+            50% {
+                filter: hue-rotate(360deg);
+            }
+        }
+
+        .secret-game .game-info h3 {
+            font-family: 'Intro', Arial, sans-serif;
+            text-align: center;
+            color: white;
+            font-size: 24px;
+        }
+
+        @keyframes Rainbow {
+            0% {background-position: 0% 50%;}
+            50% {background-position: 100% 50%;}
+            100% {background-position: 0% 50%;}
+        }
+        .about-gif {
+            margin-top: 30px;
+            width: 300px;
+            height: auto;
+            border-radius: 15px;
+            box-shadow: 0 0 8px rgba(255, 255, 255, 0.8),
+                        0 0 30px rgba(0, 255, 255, 0.8),
+                        0 0 60px rgba(0, 128, 255, 0.8);
+        }
+        .about-text {
+            position: relative;
+            margin: 20px;
+            padding: 10px;
+            width: 300px;
+            margin-top: 15px;
+            padding: 10px;
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .about-text h2 {
+            font-size: 34px;
+            margin-bottom: 15px;
+        }
+
+        .typing-text {
+            font-size: 20px;
+            color: white;
+            background: linear-gradient(to right, #6a3093, #a044ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-top: 0px;
+            display: block;
+            white-space: nowrap;
+            overflow: hidden;
+            width: 100%;
+            margin-bottom: 20px;
+        }
+        .typing-text::after {
+            content: "\00a0";
+            display: inline-block;
+            width: 0;
+            height: 24px;
+        }
+        .about-button {
+            min-height: 25px;
+            display: inline-block;
+            font-size: 16px;
+            font-weight: bold;
+            padding: 12px 24px;
+            width: 300px;
+            border-radius: 25px;
+            background: linear-gradient(145deg, #3a8ccf 0%, #00397a 100%);
+            box-shadow: 0 6px #082d53, 0 -6px #3a8ccf inset;
+            color: white;
+            cursor: pointer;
+            margin-top: 5px;
+            margin-left: 130px;
+            display: block;
+            transition: all 0.2s ease;
+            outline: none;
+            font-family: 'Intro', Arial, sans-serif;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .about-button:hover {
+            background: linear-gradient(145deg, #00397a 0%, #3a8ccf 100%);
+            box-shadow: 0 8px #082d53, 0 -6px #3a8ccf inset;
+            transform: translateY(-3px) translateX(-50%);
+        }
+
+        .about-button:active {
+            box-shadow: 0 3px #082d53, 0 -3px #3a8ccf inset;
+            transform: translateY(2px) translateX(-50%);
+        }
+         .title {
+            margin-top: 100px;
+            margin-left: 18px;
+            font-size: 28px;
+            margin-bottom: 10px;
+            color: #FFF;
+            font-weight: bold;
+        }
+
+        .image-container img {
+            margin-top: 20px;
+            margin-left: 45px
+            width: 190px;
+            height: 140px;
+            border-radius: 50%;
+            box-shadow: 0px 0px 15px 5px rgba(255, 255, 255, 0.8);
+        }
+
+        .device-info {
+            margin: 20px 0;
+            font-size: 16px;
+            transition: opacity 0.5s ease, transform 0.5s ease;
+            transform: translateY(-20px);
+            opacity: 0;
+        }
+
+        .device-info.visible {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .detect-button, .start-button {
+            font-size: 16px;
+            font-weight: bold;
+            padding: 12px 24px;
+            width: 180px;
+            border-radius: 25px;
+            background: linear-gradient(145deg, #4CAF50 0%, #087f23 100%);
+            box-shadow: 0 6px #065f18, 0 -6px #4CAF50 inset;
+            color: white;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            outline: none;
+            font-family: 'Intro', Arial, sans-serif;
+            display: block;
+            margin: 10px auto;
+        }
+
+        .detect-button:hover, .start-button:hover {
+            background: linear-gradient(145deg, #087f23 0%, #4CAF50 100%);
+            box-shadow: 0 8px #065f18, 0 -6px #4CAF50 inset;
+            transform: translateY(-3px);
+        }
+
+        .detect-button:active, .start-button:active {
+            box-shadow: 0 3px #065f18, 0 -3px #4CAF50 inset;
+            transform: translateY(2px);
+        }
+       .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.4);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+            opacity: 0;
+            transform: scale(0.95);
+            visibility: hidden;
+        }
+
+        .modal.show {
+            display: block;
+            opacity: 1;
+            visibility: visible;
+            transform: scale(1);
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 70%;
+            height: 30%;
+            position: relative;
+            top: 50%;
+            transform: translateY(-60%);
+            box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+            border-radius: 25px;
+            text-align: center;
+        }
+
+        .modal-content h2 {
+            color: black;
+            font-size: 24px;
+            margin: 10px 0;
+        }
+         .close-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: transparent;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #aaa;
+        }
+
+        .close-button:hover {
+            color: #f00;
+        }
+         .carousel {
+            position: relative;
+            width: 100%;
+            max-width: 500px;
+            margin: auto;
+        }
+
+        .slides {
+            display: flex;
+            width: 100%;
+            overflow: hidden;
+            transition: transform 0.5s ease;
+        }
+
+        .slide img {
+            width: 50%;
+            border-radius: 5px;
+        }
+
+          .prev, .next {
+            cursor: pointer;
+            position: absolute;
+            top: 50%;
+            width: auto;
+            margin-top: -14px;
+            padding: 16px;
+            color: black;
+            font-weight: bold;
+            font-size: 18px;
+            transition: 0.6s ease;
+            border-radius: 3px;
+            user-select: none;
+            background-color: rgba(0,0,0,0.0);
+        }
+
+        .prev {
+            left: 10px;
+            border-radius: 3px 0 0 3px;
+        }
+
+        .next {
+            right: 10px;
+            border-radius: 0 3px 3px 0;
+        }
+
+        .prev:hover, .next:hover {
+            background-color: rgba(0,0,0,0.0);
+        }
+
+        .dots-container {
+            text-align: center;
+            padding: 10px;
+            background: #white;
+        }
+
+        .dot {
+            cursor: pointer;
+            height: 15px;
+            width: 15px;
+            margin: 0 2px;
+            background-color: #bbb;
+            border-radius: 50%;
+            display: inline-block;
+            transition: background-color 0.6s ease;
+        }
+
+        .dot.active, .dot:hover {
+            background-color: #717171;
+        }
+         .loader {
+            border: 16px solid transparent;
+            border-top: 4px solid #3498db;
+            border-radius: 50%;
+            width: 120px;
+            height: 120px;
+            animation: spin 2s linear infinite, extend 3s forwards;
+            margin-left: 45px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @keyframes extend {
+            0% { border-top: 4px solid #3498db; }
+            25% { border-top: 16px solid #3498db; border-right: 4px solid #3498db; }
+            50% { border-top: 16px solid #3498db; border-right: 16px solid #3498db; border-bottom: 4px solid #3498db; }
+            75% { border-top: 16px solid #3498db; border-right: 16px solid #3498db; border-bottom: 16px solid #3498db; border-left: 4px solid #3498db; }
+            100% { border: 16px solid #3498db; }
+        }
+        .modal-mini {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            align-items: center;
+            justify-content: center;
+            display: flex;
+        }
+        .modal-content-mini {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            width: 80%;
+            max-width: 500px;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+        .close-button-mini {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            border: none;
+            background: none;
+            font-size: 24px;
+            cursor: pointer;
+        }
+        .close-button-mini:hover {
+            color: #f00; /* Красный цвет при наведении */
+        }
+    .telegram-button {
+    display: flex;
+    justify-content: center; /* Центрирование кнопки по горизонтали */
+    align-items: center;
+    font-size: 16px;
+    font-weight: bold;
+    padding: 12px 24px;
+    width: 300px;
+    border-radius: 25px;
+    background: linear-gradient(145deg, #3a8ccf 0%, #00397a 100%);
+    box-shadow: 0 6px #082d53, 0 -6px #3a8ccf inset;
+    color: white;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    outline: none;
+    font-family: 'Intro', Arial, sans-serif;
+    margin: 20px auto; /* Отступы сверху и снизу и центрирование по горизонтали */
+}
+
+.telegram-button:hover {
+    background: linear-gradient(145deg, #00397a 0%, #3a8ccf 100%);
+    box-shadow: 0 8px #082d53, 0 -6px #3a8ccf inset;
+    transform: translateY(-3px);
+}
+
+.telegram-button:active {
+    box-shadow: 0 3px #082d53, 0 -3px #3a8ccf inset;
+    transform: translateY(2px);
+}
+
+.language-selection {
+    display: flex;
+    flex-wrap: wrap; /* Иконки будут переноситься на новую строку, если не помещаются */
+    justify-content: center; /* Центрирование иконок */
+    gap: 10px; /* Расстояние между иконками */
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.language-option {
+    width: 50px; /* Размер иконок */
+    height: 50px;
+    cursor: pointer;
+    border-radius: 50%;
+    transition: transform 0.2s;
+}
+
+.language-option:hover {
+    transform: scale(1.1); /* Увеличение иконки при наведении */
+}
+
+@media (max-width: 600px) {
+    .language-option {
+        width: 40px; /* Уменьшаем размер иконок для мобильных устройств */
+        height: 40px;
+    }
+}
+
+
+
+
+    </style>
+</head>
+<body>
+    <header>
+
+        <span>SPH SIGNALS | AI HACK BOT</span>
+    </header>
+
+<div class="language-selection">
+    <img src="img/en.png" alt="English" class="language-option" onclick="changeLanguage('en')">
+    <img src="img/ru.png" alt="Русский" class="language-option" onclick="changeLanguage('ru')">
+    <img src="img/in.png" alt="हिंदी" class="language-option" onclick="changeLanguage('hi')">
+    <img src="img/br.png" alt="Português (Brasil)" class="language-option" onclick="changeLanguage('br')">
+    <img src="img/es.png" alt="Español" class="language-option" onclick="changeLanguage('es')">
+    <img src="img/uz.png" alt="O'zbek" class="language-option" onclick="changeLanguage('uz')">
+    <img src="img/az.png" alt="Azərbaycan dili" class="language-option" onclick="changeLanguage('az')">
+    <img src="img/tr.png" alt="Türkçe" class="language-option" onclick="changeLanguage('tr')">
+    <img src="img/pt.png" alt="Português" class="language-option" onclick="changeLanguage('pt')">
+    <img src="img/ar.png" alt="العربية" class="language-option" onclick="changeLanguage('ar')">
+</div>
+
+
+<div id="Contact" class="tabcontent">
+    <div class="image-container">
+        <h2 class="title" id="game-picker-title">GAME PICKER</h2>
+        <img src="img/sec.png" alt="Secret Image">
+    </div>
+    <p id="device-output" class="device-info">Device not detected</p>
+    <button onclick="detectDevice()" class="detect-button" id="detect-button">Detect device</button>
+    <button onclick="startGame()" class="start-button" id="start-button">Start</button>
+
+
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <button class="close-button" onclick="closeModal()">&times;</button>
+            <h2 style="text-align: center;">Instruction</h2>
+            <div class="carousel">
+                <div class="slides" style="width: 200%; transition: transform 0.5s ease;">
+                    <div class="slide" style="width: 50%; float: left;"><img src="img/inst1.png" alt="Instruction 1"></div>
+                    <div class="slide" style="width: 50%; float: left;"><img src="img/inst2.png" alt="Instruction 2"></div>
+                </div>
+                <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
+                <a class="next" onclick="plusSlides(1)">&#10095;</a>
+                <div class="dots-container">
+                    <span class="dot" onclick="currentSlide(1)"></span>
+                    <span class="dot" onclick="currentSlide(2)"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div id="miniModal" class="modal-mini">
+        <div class="modal-content-mini">
+            <button class="close-button-mini" onclick="closeMiniModal()">&times;</button>
+        </div>
+    </div>
+</div>
+
+<div id="Games" class="tabcontent active">
+    <div class="row">
+        <div class="game">
+            <img src="img/1.png" alt="Mines Preview">
+            <div class="game-info">
+                <h3 id="game1-title">Mines</h3>
+                <button id="game1-button" onclick="openGame('mines')">Open</button>
+            </div>
+        </div>
+        <div class="game">
+            <img src="img/mimines.jpg" alt="Mines Spibe Preview">
+            <div class="game-info">
+                <h3 id="game2-title">Mines Spibe</h3>
+                <button id="game2-button" onclick="openGame('minesSpibe')">Open</button>
+            </div>
+        </div>
+        <div class="game">
+            <img src="img/3.png" alt="Bombucks Preview">
+            <div class="game-info">
+                <h3 id="game3-title">Bombucks</h3>
+                <button id="game3-button" onclick="openGame('bomBucks')">Open</button>
+            </div>
+        </div>
+        <div class="game">
+            <img src="img/2.png" alt="Rocket Queen Preview">
+            <div class="game-info">
+                <h3 id="game4-title">Rocket Queen</h3>
+                <button id="game4-button" onclick="openGame('RocketQueen')">Open</button>
+            </div>
+        </div>
+        <div class="game">
+            <img src="img/6.png" alt="Royal Mines Preview">
+            <div class="game-info">
+                <h3 id="game5-title">Royal Mines</h3>
+                <button id="game5-button" onclick="openGame('royalMines')">Open</button>
+            </div>
+        </div>
+        <div class="game">
+            <img src="img/5.png" alt="Aviator Preview">
+            <div class="game-info">
+                <h3 id="game6-title">Aviator</h3>
+                <button id="game6-button" onclick="openGame('aviator')">Open</button>
+            </div>
+        </div>
+        <div class="game">
+            <img src="img/4.png" alt="Luckyjet Preview">
+            <div class="game-info">
+                <h3 id="game7-title">Luckyjet</h3>
+                <button id="game7-button" onclick="openGame('lucky')">Open</button>
+            </div>
+        </div>
+        <div class="game">
+            <img src="img/penafon.png" alt="Penalty Shoot Preview">
+            <div class="game-info">
+                <h3 id="game8-title">Penalty Shoot</h3>
+                <button id="game8-button" onclick="openGame('penalty')">Open</button>
+            </div>
+        </div>
+        <div class="game">
+            <img src="img/7.png" alt="Football X Preview">
+            <div class="game-info">
+                <h3 id="game9-title">Football X</h3>
+                <button id="game9-button" onclick="openGame('footballX')">Open</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="tab">
+    <button class="tablinks games-icon" data-tab="Games" onclick="openTab(event, 'Games', this)">
+        <img src="img/game.png" alt="Игры">
+    </button>
+    <button class="tablinks contact-icon" data-tab="Contact" onclick="openTab(event, 'Contact', this)">
+        <img src="img/money.png" alt="Контакты">
+    </button>
+</div>
+
+
+<canvas id="particleCanvas"></canvas>
+<audio id="aboutAudio" src="gif.mp3"></audio>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        let gamesButton = document.querySelector('.tablinks.games-icon');
+        openTab(new Event('click'), 'Games', gamesButton);
+        showSlides(slideIndex);
+    });
+
+
+const translations = {
+    en: {
+        gamePickerTitle: "GAME PICKER",
+        detectButton: "Detect device",
+        startButton: "Start",
+        game1Title: "Mines",
+        game1Button: "Open",
+        game2Title: "Mines Spibe",
+        game2Button: "Open",
+        game3Title: "Bombucks",
+        game3Button: "Open",
+        game4Title: "Rocket Queen",
+        game4Button: "Open",
+        game5Title: "Royal Mines",
+        game5Button: "Open",
+        game6Title: "Aviator",
+        game6Button: "Open",
+        game7Title: "Luckyjet",
+        game7Button: "Open",
+        game8Title: "Penalty Shoot",
+        game8Button: "Open",
+        game9Title: "Football X",
+        game9Button: "Open",
+        telegramButton: "Go to telegram (RU)",
+        telegramButton2: "Go to telegram (EN)"
+    },
+    ru: {
+        gamePickerTitle: "ВЫБОР ИГР",
+        detectButton: "Определить устройство",
+        startButton: "Начать",
+        game1Title: "Mines",
+        game1Button: "Открыть",
+        game2Title: "Mines Spibe",
+        game2Button: "Открыть",
+        game3Title: "Bombucks",
+        game3Button: "Открыть",
+        game4Title: "Rocket Queen",
+        game4Button: "Открыть",
+        game5Title: "Royal Mines",
+        game5Button: "Открыть",
+        game6Title: "Aviator",
+        game6Button: "Открыть",
+        game7Title: "Luckyjet",
+        game7Button: "Открыть",
+        game8Title: "Penalty Shoot",
+        game8Button: "Открыть",
+        game9Title: "Football X",
+        game9Button: "Открыть",
+        telegramButton: "Перейти в телеграм (RU)",
+        telegramButton2: "Перейти в телеграм (EN)"
+    },
+    hi: {
+        gamePickerTitle: "गेम पिकर",
+        detectButton: "डिवाइस का पता लगाएं",
+        startButton: "शुरू करें",
+        game1Title: "Mines",
+        game1Button: "खोलें",
+        game2Title: "Mines Spibe",
+        game2Button: "खोलें",
+        game3Title: "Bombucks",
+        game3Button: "खोलें",
+        game4Title: "Rocket Queen",
+        game4Button: "खोलें",
+        game5Title: "Royal Mines",
+        game5Button: "खोलें",
+        game6Title: "Aviator",
+        game6Button: "खोलें",
+        game7Title: "Luckyjet",
+        game7Button: "खोलें",
+        game8Title: "Penalty Shoot",
+        game8Button: "खोलें",
+        game9Title: "Football X",
+        game9Button: "खोलें",
+        telegramButton: "टेलीग्राम पर जाएं (RU)",
+        telegramButton2: "टेलीग्राम पर जाएं (EN)"
+    },
+    br: {
+        gamePickerTitle: "SELETOR DE JOGOS",
+        detectButton: "Detectar dispositivo",
+        startButton: "Iniciar",
+        game1Title: "Mines",
+        game1Button: "Abrir",
+        game2Title: "Mines Spibe",
+        game2Button: "Abrir",
+        game3Title: "Bombucks",
+        game3Button: "Abrir",
+        game4Title: "Rocket Queen",
+        game4Button: "Abrir",
+        game5Title: "Royal Mines",
+        game5Button: "Abrir",
+        game6Title: "Aviator",
+        game6Button: "Abrir",
+        game7Title: "Luckyjet",
+        game7Button: "Abrir",
+        game8Title: "Penalty Shoot",
+        game8Button: "Abrir",
+        game9Title: "Football X",
+        game9Button: "Abrir",
+        telegramButton: "Ir para o Telegram (RU)",
+        telegramButton2: "Ir para o Telegram (EN)"
+    },
+    es: {
+        gamePickerTitle: "SELECCIONADOR DE JUEGOS",
+        detectButton: "Detectar dispositivo",
+        startButton: "Iniciar",
+        game1Title: "Mines",
+        game1Button: "Abrir",
+        game2Title: "Mines Spibe",
+        game2Button: "Abrir",
+        game3Title: "Bombucks",
+        game3Button: "Abrir",
+        game4Title: "Rocket Queen",
+        game4Button: "Abrir",
+        game5Title: "Royal Mines",
+        game5Button: "Abrir",
+        game6Title: "Aviator",
+        game6Button: "Abrir",
+        game7Title: "Luckyjet",
+        game7Button: "Abrir",
+        game8Title: "Penalty Shoot",
+        game8Button: "Abrir",
+        game9Title: "Football X",
+        game9Button: "Abrir",
+        telegramButton: "Ir a Telegram (RU)",
+        telegramButton2: "Ir a Telegram (EN)"
+    },
+    uz: {
+        gamePickerTitle: "O'YIN TANLOVCHI",
+        detectButton: "Qurilmani aniqlash",
+        startButton: "Boshlash",
+        game1Title: "Mines",
+        game1Button: "Ochish",
+        game2Title: "Mines Spibe",
+        game2Button: "Ochish",
+        game3Title: "Bombucks",
+        game3Button: "Ochish",
+        game4Title: "Rocket Queen",
+        game4Button: "Ochish",
+        game5Title: "Royal Mines",
+        game5Button: "Ochish",
+        game6Title: "Aviator",
+        game6Button: "Ochish",
+        game7Title: "Luckyjet",
+        game7Button: "Ochish",
+        game8Title: "Penalty Shoot",
+        game8Button: "Ochish",
+        game9Title: "Football X",
+        game9Button: "Ochish",
+        telegramButton: "Telegramga o'tish (RU)",
+        telegramButton2: "Telegramga o'tish (EN)"
+    },
+    az: {
+        gamePickerTitle: "OYUN SEÇİCİ",
+        detectButton: "Cihazı aşkar et",
+        startButton: "Başla",
+        game1Title: "Mines",
+        game1Button: "Aç",
+        game2Title: "Mines Spibe",
+        game2Button: "Aç",
+        game3Title: "Bombucks",
+        game3Button: "Aç",
+        game4Title: "Rocket Queen",
+        game4Button: "Aç",
+        game5Title: "Royal Mines",
+        game5Button: "Aç",
+        game6Title: "Aviator",
+        game6Button: "Aç",
+        game7Title: "Luckyjet",
+        game7Button: "Aç",
+        game8Title: "Penalty Shoot",
+        game8Button: "Aç",
+        game9Title: "Football X",
+        game9Button: "Aç",
+        telegramButton: "Teleqrama keç (RU)",
+        telegramButton2: "Teleqrama keç (EN)"
+    },
+    tr: {
+        gamePickerTitle: "OYUN SEÇİCİ",
+        detectButton: "Cihazı tespit et",
+        startButton: "Başlat",
+        game1Title: "Mines",
+        game1Button: "Aç",
+        game2Title: "Mines Spibe",
+        game2Button: "Aç",
+        game3Title: "Bombucks",
+        game3Button: "Aç",
+        game4Title: "Rocket Queen",
+        game4Button: "Aç",
+        game5Title: "Royal Mines",
+        game5Button: "Aç",
+        game6Title: "Aviator",
+        game6Button: "Aç",
+        game7Title: "Luckyjet",
+        game7Button: "Aç",
+        game8Title: "Penalty Shoot",
+        game8Button: "Aç",
+        game9Title: "Football X",
+        game9Button: "Aç",
+        telegramButton: "Telegrame git (RU)",
+        telegramButton2: "Telegrame git (EN)"
+    },
+    pt: {
+        gamePickerTitle: "ESCOLHEDOR DE JOGOS",
+        detectButton: "Detectar dispositivo",
+        startButton: "Iniciar",
+        game1Title: "Mines",
+        game1Button: "Abrir",
+        game2Title: "Mines Spibe",
+        game2Button: "Abrir",
+        game3Title: "Bombucks",
+        game3Button: "Abrir",
+        game4Title: "Rocket Queen",
+        game4Button: "Abrir",
+        game5Title: "Royal Mines",
+        game5Button: "Abrir",
+        game6Title: "Aviator",
+        game6Button: "Abrir",
+        game7Title: "Luckyjet",
+        game7Button: "Abrir",
+        game8Title: "Penalty Shoot",
+        game8Button: "Abrir",
+        game9Title: "Football X",
+        game9Button: "Abrir",
+        telegramButton: "Ir para o Telegram (RU)",
+        telegramButton2: "Ir para o Telegram (EN)"
+    },
+    ar: {
+        gamePickerTitle: "مُختار الألعاب",
+        detectButton: "اكتشاف الجهاز",
+        startButton: "ابدأ",
+        game1Title: "Mines",
+        game1Button: "فتح",
+        game2Title: "Mines Spibe",
+        game2Button: "فتح",
+        game3Title: "Bombucks",
+        game3Button: "فتح",
+        game4Title: "Rocket Queen",
+        game4Button: "فتح",
+        game5Title: "Royal Mines",
+        game5Button: "فتح",
+        game6Title: "Aviator",
+        game6Button: "فتح",
+        game7Title: "Luckyjet",
+        game7Button: "فتح",
+        game8Title: "Penalty Shoot",
+        game8Button: "فتح",
+        game9Title: "Football X",
+        game9Button: "فتح",
+        telegramButton: "اذهب إلى Telegram (RU)",
+        telegramButton2: "اذهب إلى Telegram (EN)"
+    }
+};
+
+
+function changeLanguage(lang) {
+    console.log("Changing language to: ", lang);
+    console.log("Translations for this language: ", translations[lang]);
+
+    if (translations[lang]) {
+        document.getElementById('game-picker-title').innerText = translations[lang].gamePickerTitle;
+        document.getElementById('detect-button').innerText = translations[lang].detectButton;
+        document.getElementById('start-button').innerText = translations[lang].startButton;
+
+        document.getElementById('game1-title').innerText = translations[lang].game1Title;
+        document.getElementById('game1-button').innerText = translations[lang].game1Button;
+
+        document.getElementById('game2-title').innerText = translations[lang].game2Title;
+        document.getElementById('game2-button').innerText = translations[lang].game2Button;
+
+        document.getElementById('game3-title').innerText = translations[lang].game3Title;
+        document.getElementById('game3-button').innerText = translations[lang].game3Button;
+
+        document.getElementById('game4-title').innerText = translations[lang].game4Title;
+        document.getElementById('game4-button').innerText = translations[lang].game4Button;
+
+        document.getElementById('game5-title').innerText = translations[lang].game5Title;
+        document.getElementById('game5-button').innerText = translations[lang].game5Button;
+
+        document.getElementById('game6-title').innerText = translations[lang].game6Title;
+        document.getElementById('game6-button').innerText = translations[lang].game6Button;
+
+        document.getElementById('game7-title').innerText = translations[lang].game7Title;
+        document.getElementById('game7-button').innerText = translations[lang].game7Button;
+
+        document.getElementById('game8-title').innerText = translations[lang].game8Title;
+        document.getElementById('game8-button').innerText = translations[lang].game8Button;
+
+        document.getElementById('game9-title').innerText = translations[lang].game9Title;
+        document.getElementById('game9-button').innerText = translations[lang].game9Button;
+
+        // Обновляем текст для кнопок Telegram
+        document.getElementById('telegram-button').innerText = translations[lang].telegramButton;
+        document.getElementById('telegram-button2').innerText = translations[lang].telegramButton2;
+
+        // Обновляем текст минимодала
+        document.querySelector('.modal-content-mini h2').innerText = translations[lang].miniModalTitle;
+        document.querySelector('.modal-content-mini p').innerText = translations[lang].miniModalContent
+            .replace('{gameName}', 'игры')  // Здесь можно заменить на конкретную игру
+            .replace('{probability}', '90')  // Можно заменить на реальные данные
+            .replace('{remainingTime}', '30');  // Заменить на оставшееся время
+
+        document.querySelector('.close-button-mini').innerText = translations[lang].miniModalButton;
+    } else {
+        console.error("Translations not found for language: ", lang);
+    }
+}
+
+
+
+    function showSlides(n) {
+            var i;
+            var slides = document.getElementsByClassName("slide");
+            var dots = document.getElementsByClassName("dot");
+            var slidesContainer = document.querySelector(".slides");
+
+            if (n > slides.length) {slideIndex = 1}
+            if (n < 1) {slideIndex = slides.length}
+            for (i = 0; i < dots.length; i++) {
+                dots[i].className = dots[i].className.replace(" active", "");
+            }
+            slidesContainer.style.transform = `translateX(${-(slideIndex - 1) * 100 / slides.length}%)`;
+            dots[slideIndex - 1].className += " active";
+        }
+
+        function openTab(evt, tabName, button) {
+            var i, tabcontent, tablinks;
+            var miniModal = document.getElementById('miniModal');
+            var aboutGif = document.getElementById('aboutGif');
+        
+            // Скрываем все вкладки и удаляем класс 'active'
+            tabcontent = document.getElementsByClassName("tabcontent");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+                tabcontent[i].classList.remove('active');
+            }
+        
+            // Удаляем класс 'active' у всех кнопок
+            tablinks = document.getElementsByClassName("tablinks");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].classList.remove("active");
+            }
+        
+            // Показываем текущую вкладку и добавляем класс 'active'
+            document.getElementById(tabName).style.display = "flex";
+            document.getElementById(tabName).classList.add('active');
+            button.classList.add("active");
+        
+            // Скроллим страницу
+            if (tabName === 'Games') {
+                window.scrollTo({ top: 45, behavior: 'smooth' });
+            } else {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        
+            // Обрабатываем вкладку 'About'
+            if (tabName === 'About') {
+                var newAboutGif = aboutGif.cloneNode(true);
+                aboutGif.parentNode.replaceChild(newAboutGif, aboutGif);
+                aboutGif = newAboutGif; // обновляем ссылку на новый элемент
+                aboutAudio.play();
+            } else {
+                aboutAudio.pause();
+                aboutAudio.currentTime = 0;
+            }
+        
+            // Обрабатываем вкладку 'Contact'
+            if (tabName === 'Contact') {
+                miniModal.style.display = 'none';
+            }
+        }
+
+
+
+        const canvas = document.getElementById('particleCanvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        let particlesArray = [];
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 5 + 1;
+                this.speedX = Math.random() * 3 - 1.5;
+                this.speedY = Math.random() * 3 - 1.5;
+            }
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                if (this.size > 0.2) this.size -= 0.1;
+            }
+            draw() {
+                ctx.fillStyle = 'rgba(255,255,255,0.8)';
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        function init() {
+            for (let i = 0; i < 100; i++) {
+                particlesArray.push(new Particle());
+            }
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            for (let i = 0; i < particlesArray.length; i++) {
+                particlesArray[i].update();
+                particlesArray[i].draw();
+                if (particlesArray[i].size <= 0.3) {
+                    particlesArray.splice(i, 1);
+                    i--;
+                    particlesArray.push(new Particle());
+                }
+            }
+            requestAnimationFrame(animate);
+        }
+
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+
+
+
+        init();
+        animate();
+        const typingText = document.querySelector('.typing-text');
+        const phrases = [
+
+        ];
+        let phraseIndex = 0;
+        let letterIndex = 0;
+        let currentPhrase = [];
+        let isDeleting = false;
+        let delay = 60;
+
+        function type() {
+            if (isDeleting && currentPhrase.length === 0) {
+                phraseIndex = (phraseIndex + 1) % phrases.length;
+                letterIndex = 0;
+                isDeleting = false;
+                if (phraseIndex === 0) {
+                    setTimeout(type, 2000);
+                    return;
+                }
+            } else if (!isDeleting && currentPhrase.length === phrases[phraseIndex].length) {
+                isDeleting = true;
+                delay = 2500;
+            }
+
+            if (isDeleting) {
+                currentPhrase.pop();
+                delay = 30;
+            } else {
+                currentPhrase.push(phrases[phraseIndex][letterIndex++]);
+                delay = 120;
+            }
+
+            typingText.textContent = currentPhrase.join('');
+            typingText.style.opacity = isDeleting ? 0.5 : 1;
+            setTimeout(type, delay);
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(type, 2000);
+        });
+            $(document).ready(function () {
+            for (i = 0; i < 5; i++) {
+                $(".list li").clone().appendTo(".list");
+            }
+            $('.button').click(function () {
+                $('.window').css({
+                    right: "0"
+                });
+                $('.list li').css({
+                    border: '4px solid transparent'
+                });
+                function selfRandom(min, max) {
+                    return Math.floor(Math.random() * (max - min + 1)) + min;
+                }
+                var x = selfRandom(50, 100);
+                $('.list li:eq('+x+')').css({
+                    border: '4px solid #00ba00'
+                });
+
+                var itemWidth = 100;
+                var itemMargin = 8;
+                $('.window').animate({
+                    right: ((x * itemWidth) + (x * itemMargin) - 119)
+                }, 10000);
+            });
+        });
+        function detectDevice() {
+            var ua = navigator.userAgent;
+            var deviceType;
+            var deviceModel = "";
+
+            if (/android/i.test(ua)) {
+                deviceType = "Android";
+                var match = ua.match(/Android.*?; (\w+)\s(\w+)\s/);
+                deviceModel = match ? match[1] + " " + match[2] : "";
+            } else if (/iPhone|iPad|iPod/i.test(ua)) {
+                deviceType = "iOS";
+                if (/iPhone/i.test(ua)) {
+                    deviceModel = "iPhone";
+                } else if (/iPad/i.test(ua)) {
+                    deviceModel = "iPad";
+                } else if (/iPod/i.test(ua)) {
+                    deviceModel = "iPod";
+                }
+            } else {
+                deviceType = "Desktop";
+            }
+
+            var output = deviceModel ? deviceType + " (" + deviceModel + ")" : deviceType;
+            var deviceOutput = document.getElementById("device-output");
+            deviceOutput.classList.remove("visible");
+            setTimeout(function() {
+                deviceOutput.textContent = output;
+                deviceOutput.classList.add("visible");
+            }, 10);
+        }
+        function triggerHapticFeedback() {
+            if (navigator.vibrate) {
+                navigator.vibrate(200);
+            }
+        }
+         function startGame() {
+            console.log(document.getElementById("device-output").textContent);
+            if (document.getElementById("device-output").textContent.trim() === "Device not detected") {
+                showModal();
+            } else {
+                const now = new Date().getTime();
+                const lastGameTime = localStorage.getItem('lastGameTime');
+                // if (lastGameTime && now - lastGameTime < 60000) {
+                //     showMiniModal();
+                //     return;
+                // }
+                var randomNumber = Math.floor(Math.random() * 7) + 1;
+                var probability = Math.floor(Math.random() * 12) + 85;
+                localStorage.setItem('lastGameTime', now);
+                localStorage.setItem('lastGameImage', randomNumber);
+                localStorage.setItem('lastProbability', probability);
+
+                var imgContainer = document.querySelector('.image-container');
+                var oldImage = imgContainer.querySelector('img');
+                oldImage.style.display = 'none';
+
+                var loaderDiv = document.createElement('div');
+                loaderDiv.className = 'loader';
+                imgContainer.appendChild(loaderDiv);
+
+                setTimeout(function() {
+                    loaderDiv.remove();
+                    oldImage.style.display = 'block';
+                    oldImage.src = 'img/' + randomNumber + '.png';
+                    oldImage.style.marginLeft = "25px";
+                }, 3000);
+            }
+        }
+
+
+
+        function getGameName(imageNumber) {
+            switch (imageNumber) {
+                case '1':
+                    return 'Mines';
+                case '2':
+                    return 'Rocket Queen';
+                case '3':
+                    return 'Bombucks';
+                case '4':
+                    return 'LuckyJet';
+                case '5':
+                    return 'Aviator';
+                case '6':
+                    return 'Royal Mines';
+                default:
+                    return 'Mines';
+            }
+        }
+
+        function closeMiniModal() {
+            var miniModal = document.getElementById('miniModal');
+            miniModal.style.display = 'none';
+        }
+
+
+        function showModal() {
+            var modal = document.getElementById("modal");
+            modal.style.display = 'block';
+            requestAnimationFrame(() => {
+                modal.classList.add("show");
+            });
+        }
+
+        function closeModal() {
+            var modal = document.getElementById("modal");
+            modal.classList.remove("show");
+            setTimeout(() => {
+                modal.style.display = 'none';
+            }, 500); // 500ms - время вашей CSS transition
+        }
+
+        var slideIndex = 1;
+        showSlides(slideIndex);
+
+        function plusSlides(n) {
+            showSlides(slideIndex += n);
+        }
+
+        function currentSlide(n) {
+            showSlides(slideIndex = n);
+        }
+        function openGame(game) {
+            triggerHapticFeedback();
+            var ua = navigator.userAgent;
+            var isIOS = /iPhone|iPad|iPod/i.test(ua);
+
+            var links = {
+                mines: {
+                    ios: 'games/mines',
+                    other: 'games/mines'
+                },
+                royalMines: {
+                    ios: 'games/royalmines/',
+                    other: 'games/royalmines/'
+                },
+                RocketQueen: {
+                    ios: 'games/queen/',
+                    other: 'games/queen/'
+                },
+                penalty: {
+                    ios: 'games/penalty/',
+                    other: 'games/penalty/'
+                },
+                bomBucks: {
+                    ios: 'games/bombucks/',
+                    other: 'games/bombucks/'
+                },
+                lucky: {
+                    ios: 'games/lucky/',
+                    other: 'games/lucky/'
+                },
+                aviator: {
+                    ios: 'games/aviator/',
+                    other: 'games/aviator/'
+                },
+                footballX: {
+                    ios: 'games/footx/',
+                    other: 'games/footx/'
+                },
+                minesSpibe: {
+                    ios: 'games/spibe/',
+                    other: 'games/spibe/'
+                }
+            };
+            var url = isIOS ? links[game].ios : links[game].other;
+            window.location.href = url;
+        }
+    </script>
+</body>
+</html>

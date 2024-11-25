@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Redirecting...</title>
+  <script>
+    // Определяем тип устройства
+    function redirectBasedOnDevice() {
+      const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+      
+      if (isMobile) {
+        // Перенаправление на мобильную версию
+        window.location.href = "mobile.html";
+      } else {
+        // Перенаправление на версию для ПК
+        window.location.href = "2wine.html";
+      }
+    }
+
+    // Выполняем перенаправление при загрузке страницы
+    document.addEventListener("DOMContentLoaded", redirectBasedOnDevice);
+  </script>
+</head>
+<body>
+  <h1>Переадресация...</h1>
+  <p>Если вы не были перенаправлены автоматически, выберите:</p>
+  <ul>
+    <li><a href="2wine.html">Версия для ПК</a></li>
+    <li><a href="mobile.html">Мобильная версия</a></li>
+  </ul>
+</body>
+</html>

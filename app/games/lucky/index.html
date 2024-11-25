@@ -1,0 +1,48 @@
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <link href="https://fonts.cdnfonts.com/css/sf-pro-display" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Prosto+One&amp;display=swap" rel="stylesheet">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, user-scalable=no">
+    <title>Lucky jet</title>
+    <link rel="stylesheet" href="style.css">
+
+</head>
+<body class="page">
+    <div class="cv">
+        <img id="ob1" class="obloko" src="files/img/obl.svg">
+        <img id="ob2" class="obloko2" src="files/img/obl.svg">
+    </div>
+
+    <div class="winner">
+        <img class="luck" src="files/img/lucky.svg">
+        <img class="win" src="files/img/1win_logo.png">
+    </div>
+
+    <div class="rocket">
+         <button class="button2" target="_blank2" onclick="location.href='/app'">Back to menu</button>
+        <div class="loader2"></div>
+        <div class="visible">
+            <iframe
+                src="https://100hp.app/lucky/onewin/"
+                sandbox="allow-same-origin allow-scripts"
+                style="overflow: hidden; border: none; width: 100%; height: 550vh;">
+            </iframe>
+        </div>
+
+
+        <div id="responseText" class="text"></div>
+
+        <script src="files/script1.js"></script>
+    </div>
+
+    <div id="result" class="rand"></div>
+    <script>
+        // Запретить правый клик
+        document.addEventListener('contextmenu', function(event) {
+            event.preventDefault(); // Отменяет стандартное действие правого клика
+        });
+    </script>
+</body>
+</html>
