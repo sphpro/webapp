@@ -1,6 +1,6 @@
 @font-face {
   font-family: 'SF Pro Display';
-  src: url('/hui.ttf') format('truetype');
+  src: url('hui.ttf') format('truetype');
   font-weight: 900;
   font-style: italic;
 }
@@ -126,7 +126,7 @@ body {
 }
 
 .cells-board-wrapper::before {
-  content: url('/img/before.svg');
+  content: url('img/before.svg');
   position: absolute;
   top: 20%;
   left: -18%;
@@ -135,7 +135,7 @@ body {
 }
 
 .cells-board-wrapper::after {
-  content: url('/img/after.svg');
+  content: url('img/after.svg');
   position: absolute;
   top: 0%;
   left: 101%;
@@ -151,7 +151,7 @@ body {
 
 .cells-board {
   background-color: #0a0f1d;
-  background-image: url('/img/cellsFrame.png');
+  background-image: url('img/cellsFrame.png');
   background-position: 50%;
   background-repeat: no-repeat;
   background-size: 100%;
@@ -194,8 +194,8 @@ body {
   left: 0;
   -webkit-mask-clip: border-box;
   mask-clip: border-box;
-  -webkit-mask-image: url('/img/cellsFrame.png');
-  mask-image: url('/img/cellsFrame.png');
+  -webkit-mask-image: url('img/cellsFrame.png');
+  mask-image: url('img/cellsFrame.png');
   -webkit-mask-size: 100% 100%;
   mask-size: 100% 100%;
   position: absolute;
