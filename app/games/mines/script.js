@@ -110,7 +110,7 @@ document.addEventListener("DOMContentLoaded", function () {
                       setTimeout(async () => {
                           trapCell.innerHTML = '';
                           try {
-                              const response = await fetch("img/stars.svg");
+                              const response = await fetch("/img/stars.svg");
                               const svgContent = await response.text();
                               const svgContainer = document.createElement("div");
                               svgContainer.style.cssText = `
@@ -178,7 +178,7 @@ document.addEventListener("DOMContentLoaded", function () {
                       cell.classList.add("cell-fade-out");
                       cell.innerHTML = '';
                       try {
-                          const response = await fetch(trapIndexes.has(index) ? "img/krest.svg" : "img/stars.svg");
+                          const response = await fetch(trapIndexes.has(index) ? "/img/krest.svg" : "/img/stars.svg");
                           const svgContent = await response.text();
                           const svgContainer = document.createElement("div");
                           svgContainer.style.cssText = `
@@ -221,7 +221,7 @@ document.addEventListener("DOMContentLoaded", function () {
                               transition: opacity 0.3s, transform 0.3s;
                               pointer-events: none;
                           `;
-                          fallbackImage.src = trapIndexes.has(index) ? "img/krest.svg" : "img/stars.svg";
+                          fallbackImage.src = trapIndexes.has(index) ? "/img/krest.svg" : "/img/stars.svg";
                           cell.appendChild(fallbackImage);
                           requestAnimationFrame(() => {
                               fallbackImage.style.opacity = '1';
@@ -241,15 +241,15 @@ document.addEventListener("DOMContentLoaded", function () {
 
   function populateBoard() {
       const images = [
-          "output_svgs/image_5450.svg", "output_svgs/image_11641.svg", "output_svgs/image_18337.svg",
-          "output_svgs/image_24493.svg", "output_svgs/image_31201.svg", "output_svgs/image_37357.svg",
-          "output_svgs/image_44065.svg", "output_svgs/image_50221.svg", "output_svgs/image_56929.svg",
-          "output_svgs/image_63085.svg", "output_svgs/image_69793.svg", "output_svgs/image_75949.svg",
-          "output_svgs/image_82645.svg", "output_svgs/image_89353.svg", "output_svgs/image_95509.svg",
-          "output_svgs/image_102217.svg", "output_svgs/image_108373.svg", "output_svgs/image_115081.svg",
-          "output_svgs/image_121237.svg", "output_svgs/image_127381.svg", "output_svgs/image_134077.svg",
-          "output_svgs/image_140221.svg", "output_svgs/image_146917.svg", "output_svgs/image_153061.svg",
-          "output_svgs/image_159757.svg"
+          "/output_svgs/image_5450.svg", "/output_svgs/image_11641.svg", "/output_svgs/image_18337.svg",
+          "/output_svgs/image_24493.svg", "/output_svgs/image_31201.svg", "/output_svgs/image_37357.svg",
+          "/output_svgs/image_44065.svg", "/output_svgs/image_50221.svg", "/output_svgs/image_56929.svg",
+          "/output_svgs/image_63085.svg", "/output_svgs/image_69793.svg", "/output_svgs/image_75949.svg",
+          "/output_svgs/image_82645.svg", "/output_svgs/image_89353.svg", "/output_svgs/image_95509.svg",
+          "/output_svgs/image_102217.svg", "/output_svgs/image_108373.svg", "/output_svgs/image_115081.svg",
+          "/output_svgs/image_121237.svg", "/output_svgs/image_127381.svg", "/output_svgs/image_134077.svg",
+          "/output_svgs/image_140221.svg", "/output_svgs/image_146917.svg", "/output_svgs/image_153061.svg",
+          "/output_svgs/image_159757.svg"
       ];
 
       images.forEach(image => {
