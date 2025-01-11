@@ -52,7 +52,7 @@ document.addEventListener("DOMContentLoaded", function () {
       });
   }
 
-//   updateTrapsAmount();
+  updateTrapsAmount();
 
   function addCellClickAnimation() {
       const cells = document.querySelectorAll(".cells-board .cell");
