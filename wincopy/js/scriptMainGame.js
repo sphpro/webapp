@@ -68,7 +68,7 @@ function updateBalanceFunction() {
       const iframeDocument = iframe.contentDocument || iframe.contentWindow.document;
       const walletElement = iframeDocument.getElementById('walletValue');
       if (walletElement) {
-        walletElement.innerHTML = `${updatedBal.toFixed(2)} ₽`;
+        walletElement.innerHTML = `${updatedBal.toFixed(2)} `;
       } else {
         console.warn("Элемент walletValue внутри iframe не найден.");
       }

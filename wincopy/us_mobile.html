@@ -11213,7 +11213,7 @@
                     <div data-v-04722cbe="" class="HeaderGameRelatedBalance_root_baED0">
                       <div class="HeaderGameRelatedBalance_left_QGZbC">
                         <div class="HeaderGameRelatedBalance_content_AbmQp">
-                          <div class="HeaderGameRelatedBalance_balance_YTN_l">0 ₽</div>
+                          <div class="HeaderGameRelatedBalance_balance_YTN_l">0 $</div>
                           <!---->
                         </div>
                       </div>
@@ -11238,7 +11238,7 @@
               <div data-v-5bff8136="" class="body main-layout-item remove-bottom-margin game-related">
                 <div class="CasinoGame_root_L2xTk"><!---->
                   
-                  <iframe id='myIframe' width="100%" height="100%" src="./Games.html"
+                  <iframe id='myIframe' width="100%" height="100%" src="./games/usd_games.html"
 													frameborder="0" scrolling="yes" allowfullscreen="" allow="autoplay">
 
 												</iframe>
@@ -11252,10 +11252,6 @@
 													style='background-color: #27334f; padding: 10px; border-radius: 0px 10px 10px 0px;'>изменить</button>
 											</div>
                       <script type='module'>
-
-
-
-
 let bal = 0;
 
 // Функция для получения баланса из куков
@@ -11308,7 +11304,7 @@ function updateBalanceFunction() {
     // Обновляем текст баланса
     const balanceElement = document.querySelector(".HeaderGameRelatedBalance_balance_YTN_l");
     if (balanceElement) {
-      balanceElement.innerHTML = `${updatedBal.toLocaleString('ru-RU', { useGrouping: true })} ₽`;
+      balanceElement.innerHTML = `${updatedBal.toLocaleString('ru-RU', { useGrouping: true })} $`;
     } else {
       console.warn("Элемент с балансом не найден.");
     }
@@ -11360,6 +11356,22 @@ document.getElementById('changeButtonValue').addEventListener('click', () => {
 });
 
 
+function updPanel() {
+      const cookies = document.cookie.split('; ');
+      const balanceCookie = cookies.find(cookie => cookie.startsWith('user_balance='));
+      const balance = balanceCookie ? Number(balanceCookie.split('=')[1]) : 0;
+
+      const balanceElement = document.querySelector('.HeaderGameRelatedBalance_balance_YTN_l');
+      if (balanceElement) {
+        balanceElement.innerHTML = `${balance.toLocaleString('ru-RU')} $`;
+      }
+    }
+
+    // Обновляем баланс каждые 2 секунды
+    setInterval(updPanel, 100);
+
+    // Первое обновление при загрузке страницы
+    updPanel();
 
 
                       </script>
@@ -11626,7 +11638,33 @@ document.getElementById('changeButtonValue').addEventListener('click', () => {
       src="" width="1" height="1" frameborder="0" style="display:none" data-savepage-key="0-0"></iframe>
     <noscript></noscript>
   </div>
+  <script data-savepage-type="text/javascript" type="text/plain" id="" charset=""></script>
+  <script data-savepage-type="text/javascript" type="text/plain" id="" charset=""></script>
+  <script data-savepage-type="text/javascript" type="text/plain" id="" charset=""></script>
   <iframe
+    srcdoc="<html><head>
+<style id=&quot;savepage-cssvariables&quot;>
+  :root {
+  }
+</style>
+        </head><body><iframe sandbox=&quot;allow-scripts&quot; srcdoc=&quot;<!DOCTYPE html><html><head><base href=&amp;quot;https://www.googletagmanager.com/static/service_worker/4al0/sw_iframe.html?origin=https%3A%2F%2F1wjtay.top&amp;quot;>
+  <link rel=&amp;quot;shortcut icon&amp;quot; href=&amp;quot;data:image/x-icon;,&amp;quot; type=&amp;quot;image/x-icon&amp;quot;>
+
+<style id=&amp;quot;savepage-cssvariables&amp;quot;>
+  :root {
+  }
+</style>
+              </head>
+<body>
+  <script data-savepage-type=&amp;quot;&amp;quot; type=&amp;quot;text/plain&amp;quot;></script>
+
+</body></html>&quot; data-savepage-crossorigin=&quot;&quot; height=&quot;0&quot; width=&quot;0&quot; data-savepage-src=&quot;https://www.googletagmanager.com/static/service_worker/4al0/sw_iframe.html?origin=https%3A%2F%2F1wjtay.top&quot; src=&quot;&quot; data-savepage-key=&quot;0-1-0&quot; style=&quot;display: none; visibility: hidden;&quot;></iframe></body></html>"
+    data-savepage-sameorigin="" height="0" width="0" style="display: none; visibility: hidden;"
+    data-savepage-key="0-1"></iframe>
+  <script data-savepage-type="text/javascript" type="text/plain" id="" charset=""></script><iframe height="0" width="0"
+    data-savepage-src="https://12688802.fls.doubleclick.net/activityi;src=12688802;type=actio0;cat=allpa0;ord=1;num=6002268261329;npa=0;auiddc=637860497.1730294287;ps=1;pcor=61380791;uaa=;uab=64;uafvl=Not%252FA)Brand%3B8.0.0.0%7CChromium%3B126.0.6478.234%7CYaBrowser%3B24.7.6.1042%7CYowser%3B2.5;uamb=1;uam=Nexus%205;uap=Android;uapv=6.0;uaw=0;pscdl=noapi;frm=0;gtm=45fe4b70v9188705310z8894400803za201zb894400803;gcd=13l3l3l3l1l1;dma=0;tag_exp=101823848~101925629~102017403;epver=2;~oref=https%3A%2F%2F1wjtay.top%2Fcasino%2Fplay%2F1play_1play_mines?"
+    src="" style="display: none; visibility: hidden;" data-savepage-key="0-2"></iframe>
+  <script data-savepage-type="" type="text/plain" data-savepage-src="//www.google.com/recaptcha/api.js"></script><iframe
     srcdoc="<html><head>
 <style id=&quot;savepage-cssvariables&quot;>
   :root {
@@ -11644,69 +11682,68 @@ document.getElementById('changeButtonValue').addEventListener('click', () => {
     </style>
 
     <script type='module'>
-     
+      
 
-     let bal = 0;
+      let bal = 0;
 
-// Функция для получения баланса из куков
-function getBalanceFromCookies() {
-  const cookies = document.cookie.split('; ');
-  for (let i = 0; i < cookies.length; i++) {
-    const [key, value] = cookies[i].split('=');
-    if (key === 'user_balance') {
-      return Number(value); // Возвращаем числовое значение баланса
+  // Функция для получения баланса из куков
+  function getBalanceFromCookies() {
+    const cookies = document.cookie.split('; ');
+    for (let i = 0; i < cookies.length; i++) {
+      const [key, value] = cookies[i].split('=');
+      if (key === 'user_balance') {
+        return Number(value); // Возвращаем числовое значение баланса
+      }
     }
+    return null; // Если кука отсутствует
   }
-  return null; // Если кука отсутствует
-}
 
-// Функция для сохранения баланса в куки
-function setBalanceInCookies(balance) {
-  const date = new Date();
-  date.setTime(date.getTime() + 7 * 24 * 60 * 60 * 1000); // Срок действия 7 дней
-  document.cookie = `user_balance=${balance};expires=${date.toUTCString()};path=/`;
-}
+  // Функция для сохранения баланса в куки
+  function setBalanceInCookies(balance) {
+    const date = new Date();
+    date.setTime(date.getTime() + 7 * 24 * 60 * 60 * 1000); // Срок действия 7 дней
+    document.cookie = `user_balance=${balance};expires=${date.toUTCString()};path=/`;
+  }
 
-// Функция для обновления баланса
-function updateBalance() {
-  let balance = getBalanceFromCookies();
+  // Функция для обновления баланса
+  function updateBalance() {
+    let balance = getBalanceFromCookies();
 
-  if (balance === null) {
-    // Если кука отсутствует, запрашиваем начальный баланс
-    balance = prompt("Введите начальный баланс:", "1000");
-    if (balance !== null && !isNaN(Number(balance)) && Number(balance) >= 0) {
-      setBalanceInCookies(balance); // Сохраняем баланс в куки
-      bal = Number(balance);
+    if (balance === null) {
+      // Если кука отсутствует, запрашиваем начальный баланс
+      balance = prompt("Введите начальный баланс:", "1000");
+      if (balance !== null && !isNaN(Number(balance)) && Number(balance) >= 0) {
+        setBalanceInCookies(balance); // Сохраняем баланс в куки
+        bal = Number(balance);
+        updateBalanceFunction();
+        return Promise.resolve(bal); // Возвращаем в виде Promise
+      } else {
+        alert("Некорректный ввод. Баланс установлен в 0.");
+        setBalanceInCookies(0);
+        bal = 0;
+        return Promise.resolve(bal); // Возвращаем 0 в виде Promise
+      }
+    } else {
+      bal = balance;
+      return Promise.resolve(bal); // Если кука существует, возвращаем её значение
       updateBalanceFunction();
-      return Promise.resolve(bal); // Возвращаем в виде Promise
-    } else {
-      alert("Некорректный ввод. Баланс установлен в 0.");
-      setBalanceInCookies(0);
-      bal = 0;
-      return Promise.resolve(bal); // Возвращаем 0 в виде Promise
     }
-  } else {
-    bal = balance;
-    return Promise.resolve(bal); // Если кука существует, возвращаем её значение
-    updateBalanceFunction();
   }
-}
 
-// Функция для обновления интерфейса
-function updateBalanceFunction() {
-  updateBalance().then((updatedBal) => {
-    const balanceElement = document.querySelector(".HeaderGameRelatedBalance_balance_YTN_l");
-    if (balanceElement) {
-      balanceElement.innerHTML = `${updatedBal.toLocaleString('ru-RU', { useGrouping: true })} ₽`;
-    } else {
-      console.warn("Элемент для отображения баланса не найден.");
-    }
-  });
-}
+  // Функция для обновления интерфейса
+  function updateBalanceFunction() {
+    updateBalance().then((updatedBal) => {
+      const balanceElement = document.querySelector(".HeaderGameRelatedBalance_balance_YTN_l");
+      if (balanceElement) {
+        balanceElement.innerHTML = `${updatedBal.toLocaleString('ru-RU', { useGrouping: true })} $`;
+      } else {
+        console.warn("Элемент для отображения баланса не найден.");
+      }
+    });
+  }
 
-// Инициализация обновления баланса
-updateBalanceFunction();
-
+  // Инициализация обновления баланса
+  updateBalanceFunction();
 
 
 let titles = [
