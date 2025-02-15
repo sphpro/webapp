@@ -50,7 +50,7 @@ async function checkSignal() {
 }
 
 function fetchDataAndUpdate() {
-    const url = 'https://crash-gateway-cr.100hp.app/state?id_n=1play_luckyjet';
+    const url = 'https://crash-gateway-cc-cr.gamedev-tech.cc/state?id_n=1play_luckyjet&id_i=1';
     fetch(url, {
         headers: {
             'Authorization': getAuthorizationToken()
