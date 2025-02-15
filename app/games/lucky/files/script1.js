@@ -44,7 +44,7 @@ async function checkSignal() {
         responseText.className = 'text betting';        
         lastBettingTime = Date.now();
     } else if (state === "ending") {
-        responseText.textContent = "Waiting..";
+        responseText.textContent = "Calculating..";
         responseText.className = 'text fly';
     } 
 }
