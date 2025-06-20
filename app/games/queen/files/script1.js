@@ -1,13 +1,9 @@
-let lastBettingTime = 0; 
+let lastBettingTime = 0;
 let tokenIndex = 0;
+let isFixed = false;
 
-
-
-const tokens = [
-    "demo",
-    "demo",
-    "demo"
-];
+const tokens = ["demo", "demo", "demo"];
+const url = 'https://crash-gateway-orc-cr.gamedev-tech.cc/state?id_n=01961b11-d5d3-7ddc-a24c-0a358a2f2275&id_i=077dee8d-c923-4c02-9bee-757573662e69';
 
 function getAuthorizationToken() {
     const token = tokens[tokenIndex];
@@ -15,98 +11,68 @@ function getAuthorizationToken() {
     return `Bearer ${token}`;
 }
 
-function getRan(min, max) {
-    return Math.random() * (max - min) + min;
+function getRandomCoefficient(min = 1.1, max = 5.0) {
+    return (Math.random() * (max - min) + min).toFixed(2);
 }
 
-async function checkSignal() {
-    let randomNumber1 = getRan(1.1, 5.0).toFixed(2);
-    const url = 'https://crash-gateway-orc-cr.gamedev-tech.cc/state?id_n=01961b11-d5d3-7ddc-a24c-0a358a2f2275&id_i=077dee8d-c923-4c02-9bee-757573662e69';
-    const response = await fetch(url, {
-        headers: {
-            'Authorization': getAuthorizationToken()
+async function updateGameState() {
+    try {
+        const response = await fetch(url, {
+            headers: {
+                'Authorization': getAuthorizationToken()
+            }
+        });
+        const data = await response.json();
+        const state = data.current_state;
+        const kef = parseFloat(data.current_coefficients);
+
+        const responseText = document.getElementById('responseText');
+        const coefficientsDiv = document.getElementById('coefficients');
+
+        if (!responseText || !coefficientsDiv) return;
+
+        // Обновление коэффициентов
+        if (kef !== 1) {
+            coefficientsDiv.innerText = `x${kef}`;
+            coefficientsDiv.classList.remove('smallt');
+            coefficientsDiv.classList.add('kif');
         }
-    });
-    const data = await response.json();
-    const state = data.current_state;
 
-
-    let responseText = document.getElementById('responseText');
-    if (!responseText) {
-        // console.error('Element with ID responseText not found.');
-        return;
-    }
-
-    if (state === "betting" && Date.now() - lastBettingTime > 5000) {
-        let resultText = `${randomNumber1}x`;
-        document.getElementById("responseText").textContent = resultText;
-        localStorage.setItem('resultText', resultText);
-        responseText.className = 'text betting';        
-        lastBettingTime = Date.now();
-    } else if (state === "ending") {
-        responseText.textContent = "Waiting..";
-        responseText.className = 'text fly';
-    } 
-}
-
-function fetchDataAndUpdate() {
-    const url = 'https://crash-gateway-orc-cr.gamedev-tech.cc/state?id_n=01961b11-d5d3-7ddc-a24c-0a358a2f2275&id_i=077dee8d-c923-4c02-9bee-757573662e69';
-    fetch(url, {
-        headers: {
-            'Authorization': getAuthorizationToken()
+        // Отображение состояния игры
+        if (state === "betting" && Date.now() - lastBettingTime > 5000) {
+            const resultText = `${getRandomCoefficient()}x`;
+            responseText.textContent = resultText;
+            localStorage.setItem('resultText', resultText);
+            responseText.className = 'text betting';
+            lastBettingTime = Date.now();
+        } else if (state === "ending") {
+            responseText.textContent = "Waiting..";
+            responseText.className = 'text fly';
         }
-    })
-        .then(response => response.json())
-        .then(data => {
-            const kef = parseFloat(data.current_coefficients);
-            updateCoefficients(kef);
-        })
-        .catch(error => console.error('Error fetching data:', error));
-}
 
-function updateCoefficients(coefficients) {
-    const coefficientsDiv = document.getElementById('coefficients');
-    if (!coefficientsDiv) {
-        // console.error('Element with ID coefficients not found.');
-        return;
+    } catch (error) {
+        console.error('Error fetching game state:', error);
     }
-
-    if (coefficients !== 1) {
-        coefficientsDiv.innerText = `x${coefficients}`; 
-        coefficientsDiv.classList.remove('smallt');
-        coefficientsDiv.classList.add('kif');
-    } 
 }
-
-fetchDataAndUpdate();
-setInterval(fetchDataAndUpdate, 1300);
-let intervalId = setInterval(checkSignal, 1300);
-checkSignal();
-
-let isFixed = false; // Флаг для блокировки изменения высоты
 
 function adjustIframeHeight() {
     const iframe = document.getElementById('responsive-iframe');
     const screenHeight = window.innerHeight;
+    if (!iframe || isFixed) return;
 
-    // Если высота экрана меньше 800, фиксируем высоту и блокируем изменения
-    if (screenHeight < 820 && !isFixed) {
-        iframe.style.height = `${screenHeight}px`; // Устанавливаем высоту равной экрану
-        isFixed = true; // Блокируем дальнейшие изменения
-        window.removeEventListener('resize', adjustIframeHeight); // Отключаем обработчик
-    } else if (screenHeight >= 820 && !isFixed) {
-        // Разблокируем при больших размерах экрана и применяем адаптивную высоту
-        if (screenHeight < 1200) {
-            iframe.style.height = `${screenHeight * 0.8}px`; // Пропорциональная высота
-        } else {
-            iframe.style.height = `${screenHeight - 500}px`; // Высота с корректировкой
-        }
-        // Высота будет адаптивной до изменения экрана обратно на < 800px
+    if (screenHeight < 820) {
+        iframe.style.height = `${screenHeight}px`;
+        isFixed = true;
+        window.removeEventListener('resize', adjustIframeHeight);
+    } else {
+        iframe.style.height = screenHeight < 1200
+            ? `${screenHeight * 0.8}px`
+            : `${screenHeight - 500}px`;
     }
 }
 
-// Инициализация при загрузке страницы
+// Инициализация
 adjustIframeHeight();
-
-// Слушатель изменения размера окна
 window.addEventListener('resize', adjustIframeHeight);
+updateGameState();
+setInterval(updateGameState, 1300);
