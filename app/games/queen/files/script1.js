@@ -21,7 +21,7 @@ function getRan(min, max) {
 
 async function checkSignal() {
     let randomNumber1 = getRan(1.1, 5.0).toFixed(2);
-    const url = 'https://crash-gateway-orc-cr.gamedev-tech.cc/state?id_n=1play_rocketqueen&id_i=1';
+    const url = 'https://crash-gateway-orc-cr.gamedev-tech.cc/state?id_n=01961b11-d5d3-7ddc-a24c-0a358a2f2275&id_i=1';
     const response = await fetch(url, {
         headers: {
             'Authorization': getAuthorizationToken()
@@ -50,7 +50,7 @@ async function checkSignal() {
 }
 
 function fetchDataAndUpdate() {
-    const url = 'https://crash-gateway-orc-cr.gamedev-tech.cc/state?id_n=1play_rocketqueen&id_i=1';
+    const url = 'https://crash-gateway-orc-cr.gamedev-tech.cc/state?id_n=01961b11-d5d3-7ddc-a24c-0a358a2f2275&id_i=1';
     fetch(url, {
         headers: {
             'Authorization': getAuthorizationToken()
