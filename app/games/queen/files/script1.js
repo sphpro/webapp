@@ -79,8 +79,8 @@ function updateCoefficients(coefficients) {
 }
 
 fetchDataAndUpdate();
-setInterval(fetchDataAndUpdate, 800);
-let intervalId = setInterval(checkSignal, 800);
+setInterval(fetchDataAndUpdate, 1300);
+let intervalId = setInterval(checkSignal, 1300);
 checkSignal();
 
 let isFixed = false; // Флаг для блокировки изменения высоты
